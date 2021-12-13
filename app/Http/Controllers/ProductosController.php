@@ -13,7 +13,7 @@ class ProductosController extends Controller
      */
     public function index()
     {
-        //
+        return view('Productos.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class ProductosController extends Controller
      */
     public function create()
     {
-        //
+        return view('Productos.Ingresar_Productos');
     }
 
     /**
@@ -34,7 +34,7 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

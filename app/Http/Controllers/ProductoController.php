@@ -14,7 +14,14 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        $productos=Producto::get();
+
+        foreach ($productos as $loop => $item) {
+            $porc[$loop] = ($item->porc_impuesto * 100) . '%';
+        }
+
+
+        return view('Productos.index', compact('productos','porc'));
     }
 
     /**
@@ -24,7 +31,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        return view('Productos.Ingresar_Productos');
     }
 
     /**
@@ -35,7 +42,17 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $nuevo = new Producto;
+        $nuevo->descripcion = $request->descripcion;
+        $nuevo->precio_neto  = $request->precio_neto;
+        $porc = $request->porc_imp/100;
+        $nuevo->porc_impuesto=$porc;
+        $nuevo->valor_impuesto =$request->valor_imp;
+        $nuevo->precio_final=$request->precio_final;
+
+        $nuevo->save();
+        return redirect()->route('Index_Productos')->with('mensaje','El producto ha sido creado con éxito.');
     }
 
     /**
@@ -55,9 +72,11 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function edit(Producto $producto)
+    public function edit( $id)
     {
-        //
+        $reg=Producto::findOrFail($id);
+
+        return view ('Productos.editar', compact('reg'));
     }
 
     /**
@@ -67,9 +86,17 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, $id)
     {
-        //
+        $cambiar=Producto::findOrFail($id);
+        $cambiar->descripcion = $request->descripcion;
+        $cambiar->precio_neto=$request->precio_neto;
+        $porc = $request->porc_impuesto/100;
+        $cambiar->porc_impuesto =$porc;
+        $cambiar->valor_impuesto=$request->valor_impuesto;
+        $cambiar->precio_final=$request->precio_final;
+        $cambiar->save();
+        return redirect()->route('Index_Productos')->with('mensaje','El Producto ha sido actualizado con éxito.');
     }
 
     /**
@@ -78,8 +105,12 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy($id)
     {
-        //
+        $reg=Producto::findOrFail($id);
+
+        $reg->delete();
+              return redirect()->route('Index_Productos')->with('mensaje','El Producto ha sido eliminado con éxito.');
+
     }
 }

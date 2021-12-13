@@ -24,7 +24,7 @@ class FacturaController extends Controller
      */
     public function create()
     {
-        //
+        return view('Facturas.Ingresar_Facturas');
     }
 
     /**
